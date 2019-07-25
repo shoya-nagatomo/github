@@ -32,3 +32,10 @@ def exec_ajax(request, pk):
         data1 = request.POST.get("input_data")  # POSTで渡された値
         logger.debug(data1)
         return HttpResponse(data1)
+
+def exec_another_ajax(request, pk):
+
+    if request.method == 'POST':  # POSTの処理
+        data1 = request.POST.get("input_data")  # POSTで渡された値
+        logger.debug(data1)
+        return HttpResponse('ボタン２が押されました！')

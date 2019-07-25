@@ -15,12 +15,23 @@
         <hr>
 
         <!-- POST -->
-        <form name="name_form1" action="{% url 'sample:exec' object.pk %}" method="POST">
+        <form id="form_button1" action="{% url 'sample:exec' object.pk %}" method="POST">
             {% csrf_token %}
             <input type="text" name="input_data" value="POSTのデータ">
             <input class="btn" type="submit" value="POSTボタン">
         </form>
         <div id="resultPOST"></div>
+
+        <hr>
+
+        <!-- POST(ボタン２つの処理切り分け) -->
+        <form id="form_button2" action="{% url 'sample:exec' object.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="text" name="input_data" value="処理の切り分け">
+            <button class="btn btn-success" type="submit" value="button1" id="button31">ボタン1</button>
+            <button class="btn btn-success" type="submit" value="button2" id="button32">ボタン2</button>
+        </form>
+        <div id="resultPOSTbutton2"></div>
 
         <script>
             $('#button1').on('click', function(){
@@ -49,7 +60,7 @@
                 });
             })
 
-            $("form").submit( function(event) {
+            $("#form_button1").submit( function(event) {
                 event.preventDefault();
                 var form = $(this);
                 $('#resultPOST').text('通信中...');
@@ -70,6 +81,46 @@
                     $('#resultPOST').text('POST処理失敗.');
                 });
             });
+
+            $(function(){
+
+                // フォームにtype="hidden"のinput要素を追加
+                $('#form_button2').append('<input name="key" type="hidden" value="" />');
+
+                // ボタンクリック時、type="hidden"のinput要素に自分の値を設定
+                $("#button31, #button32").click(function(){
+                    $('input[name=key]').val($(this).val());
+                });
+
+                $('#form_button2').submit( function(event) {
+
+                    event.preventDefault();
+                    var form = $(this);
+
+                    // 押されたボタンによる切り分け
+                    var action_url = form.prop("action");
+                    if($('input[name=key]').val() == 'button2'){
+                        action_url = "{% url 'sample:exec_another' object.pk %}";
+                    }
+
+                    $.ajax({
+                         url: action_url,
+                         method: form.prop("method"),
+                         data: form.serialize(),
+                         timeout: 10000,
+                         dataType: "text",
+                    })
+                    .done( function(data) {
+                        // 通信成功時の処理を記述
+                        $('#resultPOSTbutton2').text('POST処理成功：' + data);
+                    })
+                    .fail(function() {
+                        // 通信失敗時の処理を記述
+                        $('#resultPOSTbutton2').text('POST処理失敗.');
+                    })
+                });
+            });
+
         </script>
 
         <p><a href="javascript:history.back()">&lt; Back</a></p>

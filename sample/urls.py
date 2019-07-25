@@ -12,4 +12,5 @@ urlpatterns = [
 
     # Ajax処理
     path("sample/<int:pk>/exec/", views.exec_ajax, name='exec'),
+    path("sample/<int:pk>/exec_another/", views.exec_another_ajax, name='exec_another'),
 ]
