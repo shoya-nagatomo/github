@@ -10,9 +10,9 @@ Requirement
 ===========
 
 :Python: 3.7.0
-:Django: 2.2.3
+:Django: 2.2.4
 :django-bootstrap4: 0.0.8
-:pytz: 2019.1
+:pytz: 2019.2
 :sqlparse: 0.3.0
 
 Quick start
